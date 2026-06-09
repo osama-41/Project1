@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Project1 — Technical Explanation</title>
+  <style>
+    :root {
+      --bg:       #0f1117;
+      --surface:  #1a1d27;
+      --card:     #21252f;
+      --border:   #2e3242;
+      --accent:   #7c6af7;
+      --accent2:  #4fc3f7;
+      --accent3:  #f06292;
+      --accent4:  #66bb6a;
+      --accent5:  #ffa726;
+      --text:     #e2e4ec;
+      --muted:    #8b8fa8;
+      --code-bg:  #13151e;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #1a1d27 0%, #12131d 60%, #1a1030 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 64px 40px 48px;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 24px;
+    }
+    .badge {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── LAYOUT ── */
+    .wrapper {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ── SECTION ── */
+    .section {
+      margin-top: 56px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .icon-purple { background: rgba(124,106,247,0.15); }
+    .icon-blue   { background: rgba(79,195,247,0.15); }
+    .icon-pink   { background: rgba(240,98,146,0.15); }
+    .icon-green  { background: rgba(102,187,106,0.15); }
+    .icon-orange { background: rgba(255,167,38,0.15); }
+    .icon-teal   { background: rgba(38,198,218,0.15); }
+
+    .section-header h2 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    p { margin-bottom: 14px; color: var(--text); }
+    p:last-child { margin-bottom: 0; }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+    }
+    .card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--accent2);
+    }
+    .card p { font-size: 0.93rem; color: var(--muted); }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    /* ── CODE BLOCKS ── */
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+      font-size: 0.83rem;
+      line-height: 1.65;
+    }
+    code {
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      color: #cdd6f4;
+    }
+    .kw  { color: #cba6f7; }  /* keyword  */
+    .fn  { color: #89b4fa; }  /* function */
+    .str { color: #a6e3a1; }  /* string   */
+    .cm  { color: #585b70; }  /* comment  */
+    .tp  { color: #f9e2af; }  /* type     */
+    .an  { color: #f38ba8; }  /* annotation */
+    .num { color: #fab387; }  /* number   */
+
+    /* ── FLOW DIAGRAM ── */
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0;
+      margin: 24px 0;
+    }
+    .flow-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 18px;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      min-width: 110px;
+    }
+    .flow-arrow {
+      font-size: 1.3rem;
+      color: var(--muted);
+      padding: 0 8px;
+    }
+    .fb-purple { border-color: var(--accent);  color: var(--accent); }
+    .fb-blue   { border-color: var(--accent2); color: var(--accent2); }
+    .fb-pink   { border-color: var(--accent3); color: var(--accent3); }
+    .fb-green  { border-color: var(--accent4); color: var(--accent4); }
+    .fb-orange { border-color: var(--accent5); color: var(--accent5); }
+
+    /* ── HIGHLIGHT BOX ── */
+    .info-box {
+      border-left: 3px solid var(--accent);
+      background: rgba(124,106,247,0.07);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+    .info-box.green  { border-color: var(--accent4); background: rgba(102,187,106,0.07); }
+    .info-box.blue   { border-color: var(--accent2); background: rgba(79,195,247,0.07); }
+    .info-box.orange { border-color: var(--accent5); background: rgba(255,167,38,0.07); }
+    .info-box.pink   { border-color: var(--accent3); background: rgba(240,98,146,0.07); }
+
+    /* ── MODULE TREE ── */
+    .tree {
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+      font-size: 0.83rem;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      line-height: 2;
+      color: var(--muted);
+      margin: 16px 0;
+    }
+    .tree .folder { color: var(--accent2); font-weight: 600; }
+    .tree .file   { color: var(--text); }
+    .tree .label  { color: var(--accent); font-size: 0.75rem; margin-left: 8px; }
+
+    /* ── TABLE ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 0.88rem;
+    }
+    th {
+      background: var(--surface);
+      color: var(--muted);
+      text-align: left;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+    }
+    td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    td code { background: var(--code-bg); padding: 2px 6px; border-radius: 4px; font-size: 0.82rem; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<div class="hero">
+  <h1>Project1 — Technical Breakdown</h1>
+  <p>A multi-module Android application that fetches achievements from a remote API and displays them using a clean MVVM architecture.</p>
+  <div class="badge-row">
+    <span class="badge">Kotlin 2.2.0</span>
+    <span class="badge">MVVM</span>
+    <span class="badge">Retrofit 2</span>
+    <span class="badge">Coroutines</span>
+    <span class="badge">LiveData</span>
+    <span class="badge">Data Binding</span>
+    <span class="badge">Glide 5</span>
+    <span class="badge">Multi-Module</span>
+  </div>
+</div>
+
+<div class="wrapper">
+
+  <!-- ═══════════════════ 1. PROJECT STRUCTURE ═══════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">🏗️</div>
+      <h2>Project Structure — Three Modules</h2>
+    </div>
+
+    <p>
+      The project is split into three Gradle modules. Each module has a single responsibility.
+      This separation means the UI layer cannot directly talk to the network —
+      it must go through the data layer, which enforces discipline and makes each part independently testable.
+    </p>
+
+    <div class="tree">
+      <span class="folder">Project1/</span><br>
+      &nbsp;&nbsp;├── <span class="folder">app/</span><span class="label">→ UI layer (Activities, ViewModels, Adapters, Layouts)</span><br>
+      &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── src/main/<br>
+      &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">MainActivity.kt</span><br>
+      &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">MainViewModel.kt</span><br>
+      &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">AchievementAdapter.kt</span><br>
+      &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">RecordsAdapter.kt</span><br>
+      &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── res/layout/ (activity_main, row_achievements, row_medal)<br>
+      &nbsp;&nbsp;│<br>
+      &nbsp;&nbsp;├── <span class="folder">data/</span><span class="label">→ Network layer (API, Models, Repository)</span><br>
+      &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── src/main/<br>
+      &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">ProjectApi.kt</span><br>
+      &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">RetrofitBuilder.kt</span><br>
+      &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="file">Repository.kt</span><br>
+      &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── model/ (AchievementsResponseModel, RecordsModel, WrappedAchievementsResponseModel)<br>
+      &nbsp;&nbsp;│<br>
+      &nbsp;&nbsp;└── <span class="folder">core/</span><span class="label">→ Shared utilities (Glide binding adapter)</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="file">BindingAdapters.kt</span>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>:app</h3>
+        <p>The Android Application module. Depends on both <code>:data</code> and <code>:core</code>. Knows nothing about Retrofit or the network directly.</p>
+      </div>
+      <div class="card">
+        <h3>:data</h3>
+        <p>An Android Library module. Owns all network communication, models, and the Repository. Has no knowledge of any UI component.</p>
+      </div>
+      <div class="card">
+        <h3>:core</h3>
+        <p>An Android Library module for shared utilities used across modules. Currently holds the Glide image-loading binding adapter.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ 2. ARCHITECTURE — MVVM ═══════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-blue">🧱</div>
+      <h2>Architecture Pattern — MVVM + Repository</h2>
+    </div>
+
+    <p>
+      The app follows <strong>MVVM (Model–View–ViewModel)</strong> combined with the <strong>Repository pattern</strong>.
+      The idea is that each layer only knows about the layer directly below it.
+      The UI never talks to the network. The ViewModel never builds HTTP requests.
+    </p>
+
+    <div class="flow">
+      <div class="flow-box fb-purple">View<br><small style="font-weight:400;color:var(--muted)">MainActivity</small></div>
+      <div class="flow-arrow">⟷</div>
+      <div class="flow-box fb-blue">ViewModel<br><small style="font-weight:400;color:var(--muted)">MainViewModel</small></div>
+      <div class="flow-arrow">⟷</div>
+      <div class="flow-box fb-pink">Repository<br><small style="font-weight:400;color:var(--muted)">Repository.kt</small></div>
+      <div class="flow-arrow">⟷</div>
+      <div class="flow-box fb-green">API Interface<br><small style="font-weight:400;color:var(--muted)">ProjectApi.kt</small></div>
+      <div class="flow-arrow">⟷</div>
+      <div class="flow-box fb-orange">Remote Server<br><small style="font-weight:400;color:var(--muted)">Postman Mock</small></div>
+    </div>
+
+    <table>
+      <thead>
+        <tr><th>Layer</th><th>Class</th><th>Responsibility</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>View</strong></td>
+          <td><code>MainActivity</code></td>
+          <td>Observes LiveData. Sets the adapter on the RecyclerView. Shows a Toast on error. Zero business logic.</td>
+        </tr>
+        <tr>
+          <td><strong>ViewModel</strong></td>
+          <td><code>MainViewModel</code></td>
+          <td>Launches the coroutine. Calls the Repository. Publishes results to LiveData. Survives screen rotation.</td>
+        </tr>
+        <tr>
+          <td><strong>Repository</strong></td>
+          <td><code>Repository</code></td>
+          <td>The single source of truth. Calls the API, unwraps the response, and returns plain data to the ViewModel.</td>
+        </tr>
+        <tr>
+          <td><strong>API Interface</strong></td>
+          <td><code>ProjectApi</code></td>
+          <td>Declares the HTTP endpoints using Retrofit annotations. Retrofit generates the actual implementation at runtime.</td>
+        </tr>
+        <tr>
+          <td><strong>Network</strong></td>
+          <td><code>RetrofitBuilder</code></td>
+          <td>Singleton that builds and returns a configured Retrofit instance with the base URL and Gson converter.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════════════ 3. API CONNECTION ═══════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">🌐</div>
+      <h2>API Connection — Retrofit</h2>
+    </div>
+
+    <p>
+      <strong>Retrofit</strong> is a type-safe HTTP client for Android. You describe your API as a Kotlin interface
+      with annotated functions, and Retrofit generates the code that actually makes the network call.
+    </p>
+
+    <h3 style="color:var(--accent2); margin: 20px 0 8px;">Step 1 — RetrofitBuilder (the HTTP engine)</h3>
+    <p>
+      <code>RetrofitBuilder</code> is a Kotlin <strong>object</strong> (a singleton — only one instance ever exists).
+      It configures Retrofit with two things: where to send requests (the base URL) and how to parse the JSON response (Gson).
+    </p>
+
+<pre><code><span class="kw">object</span> <span class="tp">RetrofitBuilder</span> {
+    <span class="kw">private const val</span> baseUrl = <span class="str">"https://786b905e-735c-4be6-adfb-949d5dadee32.mock.pstmn.io/"</span>
+
+    <span class="kw">fun</span> <span class="fn">getInstance</span>(): <span class="tp">Retrofit</span> {
+        <span class="kw">return</span> <span class="tp">Retrofit</span>.Builder()
+            .<span class="fn">baseUrl</span>(baseUrl)              <span class="cm">// all requests go to this root URL</span>
+            .<span class="fn">addConverterFactory</span>(<span class="tp">GsonConverterFactory</span>.<span class="fn">create</span>()) <span class="cm">// JSON → Kotlin data classes</span>
+            .<span class="fn">build</span>()
+    }
+}</code></pre>
+
+    <div class="info-box blue">
+      <strong>Why a Kotlin object?</strong> An <code>object</code> in Kotlin is a singleton by language definition.
+      There is no constructor — the first time you reference it, it is created, and every subsequent reference returns the same instance.
+      This means Retrofit is only configured once for the entire app lifetime.
+    </div>
+
+    <h3 style="color:var(--accent2); margin: 20px 0 8px;">Step 2 — ProjectApi (the endpoint declaration)</h3>
+    <p>
+      This is just an interface. You write the endpoint as a function — Retrofit reads the annotations
+      and generates the full HTTP implementation for you at runtime. No manual URL building, no manual parsing.
+    </p>
+
+<pre><code><span class="kw">interface</span> <span class="tp">ProjectApi</span> {
+
+    <span class="an">@GET</span>(<span class="str">"/achievements"</span>)
+    <span class="kw">suspend fun</span> <span class="fn">getAchievements</span>(): <span class="tp">WrappedAchievementsResponseModel</span>
+}</code></pre>
+
+    <div class="info-box green">
+      <strong>What does <code>suspend</code> mean here?</strong> It means this function can only be called from a coroutine.
+      Retrofit detects the <code>suspend</code> keyword and automatically runs the network request off the main thread,
+      then resumes the coroutine with the result when the response arrives — no callbacks, no threads to manage manually.
+    </div>
+
+    <h3 style="color:var(--accent2); margin: 20px 0 8px;">Step 3 — JSON → Data Classes (Gson)</h3>
+    <p>
+      The server returns JSON. Gson maps each JSON field to a property in a Kotlin data class automatically,
+      matching by field name. The <code>@SerializedName</code> annotation handles cases where the JSON key
+      differs from the Kotlin property name.
+    </p>
+
+<pre><code><span class="cm">// What the server returns (simplified JSON):</span>
+<span class="cm">// {</span>
+<span class="cm">//   "data": [</span>
+<span class="cm">//     { "id": 1, "title": "Personal Records", "label": "4 of 6", "records": [...] }</span>
+<span class="cm">//   ]</span>
+<span class="cm">// }</span>
+
+<span class="cm">// The outer wrapper — matches the top-level JSON object</span>
+<span class="kw">data class</span> <span class="tp">WrappedAchievementsResponseModel</span>(
+    <span class="kw">val</span> data: <span class="tp">List</span>&lt;<span class="tp">AchievementsResponseModel</span>&gt;
+)
+
+<span class="cm">// Each achievement in the "data" array</span>
+<span class="kw">data class</span> <span class="tp">AchievementsResponseModel</span>(
+    <span class="an">@SerializedName</span>(<span class="str">"id"</span>)       <span class="cm">// JSON key is "id", Kotlin name is idAchievements</span>
+    <span class="kw">val</span> idAchievements: <span class="tp">Int</span>,
+    <span class="kw">val</span> title: <span class="tp">String</span>,
+    <span class="kw">val</span> label: <span class="tp">String</span>,
+    <span class="kw">val</span> records: <span class="tp">List</span>&lt;<span class="tp">RecordsModel</span>&gt;
+)
+
+<span class="cm">// Each medal record nested inside an achievement</span>
+<span class="kw">data class</span> <span class="tp">RecordsModel</span>(
+    <span class="kw">val</span> id: <span class="tp">Int</span>,
+    <span class="kw">val</span> title: <span class="tp">String</span>,
+    <span class="kw">val</span> label: <span class="tp">String</span>,
+    <span class="kw">val</span> active: <span class="tp">Boolean</span>,
+    <span class="kw">val</span> image: <span class="tp">String</span>   <span class="cm">// URL string, loaded later by Glide</span>
+)</code></pre>
+  </div>
+
+  <!-- ═══════════════════ 4. REPOSITORY ═══════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-pink">📦</div>
+      <h2>Repository — The Single Source of Truth</h2>
+    </div>
+
+    <p>
+      The Repository is a plain class that sits between the ViewModel and the data sources (network, database, cache, etc.).
+      Its job is to hide <em>where</em> data comes from. The ViewModel just asks "give me the achievements"
+      — it does not care if they come from the network, a local cache, or a database.
+    </p>
+
+<pre><code><span class="kw">class</span> <span class="tp">Repository</span> {
+
+    <span class="kw">suspend fun</span> <span class="fn">getAchievements</span>(): <span class="tp">List</span>&lt;<span class="tp">AchievementsResponseModel</span>&gt; {
+        <span class="kw">val</span> achievementsApi = <span class="tp">RetrofitBuilder</span>.<span class="fn">getInstance</span>().<span class="fn">create</span>(<span class="tp">ProjectApi</span>::<span class="kw">class</span>.java)
+        <span class="kw">return</span> achievementsApi.<span class="fn">getAchievements</span>().data
+    }
+}</code></pre>
+
+    <p>Three things happen on that one line inside the function:</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>1. Build the API</h3>
+        <p><code>RetrofitBuilder.getInstance().create(ProjectApi::class.java)</code> — Retrofit reads the <code>ProjectApi</code> interface and generates a real implementation of it at runtime using reflection.</p>
+      </div>
+      <div class="card">
+        <h3>2. Make the HTTP call</h3>
+        <p><code>.getAchievements()</code> — triggers the actual <code>GET /achievements</code> network request. Because it's <code>suspend</code>, the coroutine waits here without blocking any thread.</p>
+      </div>
+      <div class="card">
+        <h3>3. Unwrap the response</h3>
+        <p><code>.data</code> — the server wraps the list inside a <code>{ "data": [...] }</code> object. The Repository strips that wrapper and returns only the list, so the ViewModel never has to know about the envelope.</p>
+      </div>
+    </div>
+
+    <div class="info-box orange">
+      <strong>Why have a Repository at all?</strong> Without it, the ViewModel would directly call Retrofit.
+      That makes testing impossible (you can't swap out a real network call for a fake one) and mixes
+      responsibilities. With a Repository, you could later add a local Room database as a cache — the ViewModel
+      would never need to change, because the Repository decides which source to use.
+    </div>
+  </div>
+
+  <!-- ═══════════════════ 5. COROUTINES ═══════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-orange">⚡</div>
+      <h2>Coroutines — Async Without the Pain</h2>
+    </div>
+
+    <p>
+      Android's main thread drives the UI. If you do a network request on it, the app freezes and Android
+      will kill it ("Application Not Responding"). You need to do the request on a background thread and
+      then bring the result back to the main thread to update the UI.
+    </p>
+    <p>
+      Traditionally this required callbacks, RxJava streams, or manual thread management.
+      <strong>Kotlin Coroutines</strong> let you write that async code as if it were sequential — no nested callbacks,
+      no explicit thread switching.
+    </p>
+
+<pre><code><span class="kw">class</span> <span class="tp">MainViewModel</span> : <span class="tp">ViewModel</span>() {
+
+    <span class="kw">private val</span> repository = <span class="tp">Repository</span>()
+
+    <span class="kw">val</span> achievementsSuccessLiveData: <span class="tp">MutableLiveData</span>&lt;<span class="tp">List</span>&lt;<span class="tp">AchievementsResponseModel</span>&gt;&gt; = <span class="tp">MutableLiveData</span>()
+    <span class="kw">val</span> achievementsErrorLiveData: <span class="tp">MutableLiveData</span>&lt;<span class="tp">Exception</span>&gt; = <span class="tp">MutableLiveData</span>()
+
+    <span class="kw">init</span> {
+        <span class="fn">getAchievements</span>()  <span class="cm">// called automatically when the ViewModel is first created</span>
+    }
+
+    <span class="kw">fun</span> <span class="fn">getAchievements</span>() {
+        viewModelScope.<span class="fn">launch</span> {           <span class="cm">// 1. start a coroutine</span>
+            <span class="kw">try</span> {
+                <span class="kw">val</span> response = repository.<span class="fn">getAchievements</span>()  <span class="cm">// 2. suspend — waits for network</span>
+                achievementsSuccessLiveData.<span class="fn">postValue</span>(response) <span class="cm">// 3. deliver result</span>
+            } <span class="kw">catch</span> (e: <span class="tp">Exception</span>) {
+                achievementsErrorLiveData.<span class="fn">postValue</span>(e)          <span class="cm">// 4. deliver error</span>
+            }
+        }
+    }
+}</code></pre>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>viewModelScope</h3>
+        <p>A coroutine scope tied to the ViewModel's lifecycle. When the ViewModel is destroyed (e.g. app closed), all coroutines launched in this scope are automatically cancelled — no memory leaks.</p>
+      </div>
+      <div class="card">
+        <h3>launch { }</h3>
+        <p>Starts a new coroutine. Code inside runs asynchronously. The <code>launch</code> call itself returns immediately — it doesn't wait for the block to finish.</p>
+      </div>
+      <div class="card">
+        <h3>suspend</h3>
+        <p>A function marked <code>suspend</code> can pause ("suspend") without blocking the thread. The thread is free to do other work while waiting. When the result is ready, the coroutine resumes from exactly where it left off.</p>
+      </div>
+      <div class="card">
+        <h3>try / catch</h3>
+        <p>Error handling in coroutines works like normal Kotlin. If the network fails, the <code>catch</code> block runs and the error LiveData is updated — no separate error callbacks needed.</p>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>Coroutines vs. Threads:</strong> A thread is an OS resource — you can have hundreds at most before performance degrades.
+      A coroutine is lightweight — you can have tens of thousands. Coroutines also know how to switch between
+      threads automatically (Retrofit uses <code>Dispatchers.IO</code> internally). This project never manually
+      creates a thread or manages an executor.
+    </div>
+
+    <div class="info-box blue">
+      <strong>Note on Flows:</strong> This project uses <strong>LiveData</strong> as the reactive stream rather than Kotlin Flows.
+      LiveData is lifecycle-aware — it only delivers updates when the Activity/Fragment is in an active state (started/resumed),
+      preventing crashes from updating a destroyed UI. Flows are more powerful and the modern recommendation,
+      but LiveData is simpler and sufficient here.
+    </div>
+  </div>
+
+  <!-- ═══════════════════ 6. VIEWMODEL ═══════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-teal">🧠</div>
+      <h2>ViewModel — Surviving Rotation</h2>
+    </div>
+
+    <p>
+      Every time you rotate your phone, Android destroys and recreates the Activity.
+      Without a ViewModel, that would cancel your network request and lose all your data.
+      The ViewModel lives independently of the Activity's lifecycle — it survives rotation and is only
+      destroyed when the user actually leaves the screen (presses back).
+    </p>
+
+    <div class="flow">
+      <div class="flow-box fb-purple">Activity Created</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box fb-blue">ViewModel Created<br><small style="font-weight:400">init{ } runs</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box fb-pink">Screen Rotated</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box fb-green">Activity Recreated<br><small style="font-weight:400">same ViewModel returned</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box fb-orange">LiveData re-delivers<br><small style="font-weight:400">last known value</small></div>
+    </div>
+
+    <p>
+      <code>ViewModelProvider(this)[MainViewModel::class.java]</code> in <code>MainActivity</code> is the key call.
+      If a ViewModel already exists for this Activity (e.g. after a rotation), the existing one is returned.
+      If not, a new one is created and <code>init { getAchievements() }</code> runs.
+      This means the network request only fires once, not every time the screen rotates.
+    </p>
+
+    <h3 style="color:var(--accent2); margin: 20px 0 8px;">LiveData — The Two Channels</h3>
+    <p>
+      The ViewModel exposes two <code>MutableLiveData</code> streams — one for success, one for errors.
+      The Activity observes both and reacts accordingly.
+    </p>
+
+<pre><code><span class="cm">// In MainViewModel — publish data</span>
+achievementsSuccessLiveData.<span class="fn">postValue</span>(response)   <span class="cm">// thread-safe, can be called from coroutine</span>
+achievementsErrorLiveData.<span class="fn">postValue</span>(e)
+
+<span class="cm">// In MainActivity — observe data</span>
+viewModel.achievementsSuccessLiveData.<span class="fn">observe</span>(<span class="kw">this</span>) { response ->
+    binding.recyclerViewAchievement.adapter = <span class="tp">AchievementAdapter</span>(response)
+}
+viewModel.achievementsErrorLiveData.<span class="fn">observe</span>(<span class="kw">this</span>) { e ->
+    <span class="tp">Toast</span>.<span class="fn">makeText</span>(<span class="kw">this</span>, <span class="str">"error=${e.localizedMessage}"</span>, <span class="tp">Toast</span>.LENGTH_LONG).<span class="fn">show</span>()
+}</code></pre>
+
+    <div class="info-box green">
+      <strong>postValue vs setValue:</strong> <code>postValue()</code> is thread-safe and can be called from a background thread (the coroutine).
+      <code>setValue()</code> must be called from the main thread. Since the coroutine runs off-thread,
+      <code>postValue()</code> is used here.
+    </div>
+  </div>
+
+  <!-- ═══════════════════ 7. DATA BINDING ═══════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-purple">🔗</div>
+      <h2>Data Binding — Model → UI Automatically</h2>
+    </div>
+
+    <p>
+      Normally you find views with <code>findViewById()</code> or view binding, then manually set each property:
+      <code>textView.text = model.title</code>. <strong>Data Binding</strong> lets you write those assignments directly
+      in the XML layout, so the framework generates the glue code for you.
+    </p>
+
+    <h3 style="color:var(--accent2); margin: 20px 0 8px;">How a Data Binding Layout Works</h3>
+    <p>
+      Any layout wrapped in a <code>&lt;layout&gt;</code> tag becomes a data binding layout.
+      Inside it, you declare a <code>&lt;data&gt;</code> block with variables, and use
+      <code>@{ }</code> expressions to bind them directly to view properties.
+    </p>
+
+<pre><code><span class="cm">&lt;!-- row_achievements.xml — the outer achievement row --&gt;</span>
+&lt;<span class="an">layout</span>&gt;
+    &lt;<span class="an">data</span>&gt;
+        &lt;<span class="an">variable</span>
+            name=<span class="str">"model"</span>
+            type=<span class="str">"com.training.ptojectone.data.model.AchievementsResponseModel"</span> /&gt;
+    &lt;/<span class="an">data</span>&gt;
+
+    &lt;ConstraintLayout ...&gt;
+        &lt;AppCompatTextView
+            android:text=<span class="str">"@{model.title}"</span>   <span class="cm">&lt;!-- bound directly --&gt;</span>
+            ... /&gt;
+        &lt;AppCompatTextView
+            android:text=<span class="str">"@{model.label}"</span>   <span class="cm">&lt;!-- bound directly --&gt;</span>
+            ... /&gt;
+    &lt;/ConstraintLayout&gt;
+&lt;/<span class="an">layout</span>&gt;</code></pre>
+
+    <div class="info-box">
+      The Android build system reads every <code>&lt;layout&gt;</code> XML and generates a Kotlin class for it.
+      <code>row_achievements.xml</code> → <code>RowAchievementsBinding</code>.
+      <code>row_medal.xml</code> → <code>RowMedalBinding</code>.
+      <code>activity_main.xml</code> → <code>ActivityMainBinding</code> (view binding — no <code>&lt;layout&gt;</code> tag needed).
+    </div>
+
+    <h3 style="color:var(--accent2); margin: 20px 0 8px;">Using Binding in Adapters</h3>
+    <p>
+      Instead of inflating a plain <code>View</code> and calling <code>findViewById</code>,
+      the adapters inflate the <strong>Binding</strong> class. Then setting data is one line:
+      <code>binding.model = model</code> — that single assignment triggers all the
+      <code>@{ }</code> expressions in the XML to update.
+    </p>
+
+<pre><code><span class="kw">class</span> <span class="tp">AchievementAdapter</span>(<span class="kw">private val</span> list: <span class="tp">List</span>&lt;<span class="tp">AchievementsResponseModel</span>&gt;) :
+    <span class="tp">RecyclerView</span>.<span class="tp">Adapter</span>&lt;<span class="tp">AchievementAdapter</span>.<span class="tp">MedalViewHolder</span>&gt;() {
+
+    <span class="kw">override fun</span> <span class="fn">onCreateViewHolder</span>(parent: <span class="tp">ViewGroup</span>, viewType: <span class="tp">Int</span>): <span class="tp">MedalViewHolder</span> {
+        <span class="cm">// Inflate the binding class — not just a View</span>
+        <span class="kw">val</span> binding = <span class="tp">RowAchievementsBinding</span>.<span class="fn">inflate</span>(
+            <span class="tp">LayoutInflater</span>.<span class="fn">from</span>(parent.context), parent, <span class="kw">false</span>
+        )
+        <span class="kw">return</span> <span class="tp">MedalViewHolder</span>(binding)
+    }
+
+    <span class="kw">inner class</span> <span class="tp">MedalViewHolder</span>(<span class="kw">private val</span> binding: <span class="tp">RowAchievementsBinding</span>) :
+        <span class="tp">RecyclerView</span>.<span class="tp">ViewHolder</span>(binding.root) {
+
+        <span class="kw">fun</span> <span class="fn">bind</span>(model: <span class="tp">AchievementsResponseModel</span>) {
+            binding.model = model   <span class="cm">// one line — updates ALL bound views in the XML</span>
+            binding.recyclerViewMedal.adapter = <span class="tp">RecordsAdapter</span>(model.records) <span class="cm">// nested RecyclerView</span>
+        }
+    }
+}</code></pre>
+
+    <h3 style="color:var(--accent2); margin: 20px 0 8px;">Custom Binding Adapter — Loading Images with Glide</h3>
+    <p>
+      Data binding knows how to set text, visibility, colors, etc. out of the box.
+      But loading an image from a URL is not a built-in operation — you need a custom <strong>Binding Adapter</strong>.
+      A Binding Adapter is a function annotated with <code>@BindingAdapter</code> that teaches the data binding
+      framework how to handle a custom XML attribute.
+    </p>
+
+<pre><code><span class="cm">// core/BindingAdapters.kt</span>
+<span class="an">@BindingAdapter</span>(<span class="str">"imageUrl"</span>)                  <span class="cm">// matches app:imageUrl in XML</span>
+<span class="kw">fun</span> <span class="tp">ImageView</span>.<span class="fn">imageUrl</span>(url: <span class="tp">String</span>?) {
+    <span class="tp">Glide</span>.<span class="fn">with</span>(<span class="kw">this</span>.context)
+        .<span class="fn">load</span>(url)                           <span class="cm">// download image from URL</span>
+        .<span class="fn">into</span>(<span class="kw">this</span>)                          <span class="cm">// place it into the ImageView</span>
+}</code></pre>
+
+<pre><code><span class="cm">&lt;!-- row_medal.xml — used automatically when app:imageUrl is set --&gt;</span>
+&lt;AppCompatImageView
+    <span class="an">app:imageUrl</span>=<span class="str">"@{model.image}"</span>   <span class="cm">&lt;!-- triggers the @BindingAdapter above --&gt;</span>
+    android:layout_width=<span class="str">"110dp"</span>
+    android:layout_height=<span class="str">"110dp"</span>
+    ... /&gt;</code></pre>
+
+    <div class="info-box green">
+      <strong>Glide</strong> handles the entire image pipeline: downloads the image on a background thread,
+      caches it in memory and on disk so it's not re-downloaded on scroll, decodes it to the correct size,
+      and places it in the ImageView on the main thread — all triggered by that single <code>app:imageUrl</code> attribute.
+    </div>
+  </div>
+
+  <!-- ═══════════════════ 8. DATA FLOW — END TO END ═══════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon icon-green">🔄</div>
+      <h2>Full Data Flow — End to End</h2>
+    </div>
+
+    <p>Here is the complete journey data takes from the server to the screen:</p>
+
+    <div class="card">
+      <h3>① App Launches → ViewModel Created</h3>
+      <p>
+        <code>MainActivity.onCreate()</code> calls <code>ViewModelProvider(this)[MainViewModel::class.java]</code>.
+        A new <code>MainViewModel</code> is created. Its <code>init { }</code> block immediately calls <code>getAchievements()</code>.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>② Coroutine Starts</h3>
+      <p>
+        <code>viewModelScope.launch { }</code> starts a coroutine on the main thread dispatcher.
+        Execution enters the coroutine body and hits <code>repository.getAchievements()</code>.
+        Because this is a <code>suspend</code> function, the coroutine suspends — the main thread is released
+        and is free to render frames while waiting.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>③ HTTP Request</h3>
+      <p>
+        Retrofit executes the <code>GET /achievements</code> request on a background I/O thread.
+        The raw JSON response comes back from the Postman mock server.
+        Gson automatically deserializes it into <code>WrappedAchievementsResponseModel</code>.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>④ Repository Unwraps</h3>
+      <p>
+        The Repository calls <code>.data</code> on the wrapped model, stripping the outer envelope.
+        It returns a plain <code>List&lt;AchievementsResponseModel&gt;</code> to the ViewModel.
+        The coroutine resumes.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>⑤ LiveData Updated</h3>
+      <p>
+        <code>achievementsSuccessLiveData.postValue(response)</code> posts the list to LiveData.
+        LiveData checks whether the Activity is in an active state (started/resumed).
+        If it is, it delivers the value to the observer.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>⑥ RecyclerView Populated</h3>
+      <p>
+        The observer in <code>MainActivity</code> receives the list and sets an
+        <code>AchievementAdapter</code> on the RecyclerView.
+        The adapter creates <code>RowAchievementsBinding</code> instances for each row.
+        <code>binding.model = model</code> populates the title and label via data binding.
+        A nested <code>RecordsAdapter</code> is set on the inner RecyclerView inside each achievement row.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>⑦ Images Load Asynchronously</h3>
+      <p>
+        Each medal row has <code>app:imageUrl="@{model.image}"</code> in its layout.
+        The custom binding adapter is called with the URL string.
+        Glide fetches the image on a background thread, caches it, and places it in the
+        <code>AppCompatImageView</code> when ready — completely independent of the main data flow.
+      </p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -3,16 +3,19 @@ package com.training.ptojectone.ui.main
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModelProvider
+import androidx.core.view.isVisible
 import com.training.ptojectone.R
 import com.training.ptojectone.databinding.ActivityMainBinding
 import com.training.ptojectone.ui.main.adapter.AchievementAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -20,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
-        initViewModel()
+
         initObservers()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -37,9 +40,10 @@ class MainActivity : AppCompatActivity() {
         viewModel.achievementsErrorLiveData.observe(this) { e ->
             Toast.makeText(this,"error=${e.localizedMessage}", Toast.LENGTH_LONG).show()
         }
-    }
 
-    fun initViewModel() {
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        viewModel.achievementsLoadingLiveData.observe(this) { show ->
+                binding.progressCircular.isVisible = show
+
+        }
     }
 }

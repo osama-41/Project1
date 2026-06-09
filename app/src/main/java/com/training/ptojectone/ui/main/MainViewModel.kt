@@ -1,18 +1,26 @@
 package com.training.ptojectone.ui.main
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.training.ptojectone.data.model.AchievementsResponseModel
 import com.training.ptojectone.data.repository.Repository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor(private val repository: Repository): ViewModel() {
 
-    private val repository = Repository()
+    private val _achievementsSuccessLiveData: MutableLiveData<List<AchievementsResponseModel>> = MutableLiveData()
+    val achievementsSuccessLiveData: LiveData<List<AchievementsResponseModel>> = _achievementsSuccessLiveData
 
-    val achievementsSuccessLiveData: MutableLiveData<List<AchievementsResponseModel>> = MutableLiveData()
-    val achievementsErrorLiveData: MutableLiveData<Exception> = MutableLiveData()
+    private val _achievementsErrorLiveData: MutableLiveData<Exception> = MutableLiveData()
+    val achievementsErrorLiveData: LiveData<Exception> = _achievementsErrorLiveData
+
+    private val _achievementsLoadingLiveData: MutableLiveData<Boolean> = MutableLiveData()
+    val achievementsLoadingLiveData: LiveData<Boolean> = _achievementsLoadingLiveData
 
     init {
         getAchievements()
@@ -20,12 +28,14 @@ class MainViewModel : ViewModel() {
 
     fun getAchievements() {
         viewModelScope.launch {
+            _achievementsLoadingLiveData.postValue(true)
             try {
                 val response = repository.getAchievements()
-                achievementsSuccessLiveData.postValue(response)
+                _achievementsSuccessLiveData.postValue(response)
             } catch (e: Exception) {
-                achievementsErrorLiveData.postValue(e)
+                _achievementsErrorLiveData.postValue(e)
             }
+            _achievementsLoadingLiveData.postValue(false)
         }
     }
 }
